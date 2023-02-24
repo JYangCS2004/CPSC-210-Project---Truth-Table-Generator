@@ -13,8 +13,8 @@ class LogicExpTest {
 
     @BeforeEach
     void setUp() {
-        exp = new LogicExp("(P|Q)");
-        longerExp = new LogicExp("((P|Q)=R)");
+        exp = new LogicExp("P  | Q");
+        longerExp = new LogicExp("(P|Q)=R");
     }
 
     @Test
@@ -40,14 +40,48 @@ class LogicExpTest {
 
     @Test
     void evaluateTestMultipleBrackets() {
+        LogicExp expBracket = new LogicExp("(P|Q)&~(P&Q)");
         AssignModel model = new AssignModel();
         model.add("P");
         model.add("Q");
-        model.add("R");
 
         model.nextValues();
         model.nextValues();
-        assertEquals(0, longerExp.evaluate(model));
+        assertEquals(1, expBracket.evaluate(model));
+    }
+
+    @Test
+    void isValidTestValidExps() {
+        assertTrue(new LogicExp("P&Q").testCorrectOperatorsWithinBrackets());
+        assertTrue(new LogicExp("(P&Q)").isValid());
+    }
+
+    @Test
+    void isValidTestMissingBrackets() {
+        LogicExp brackets = new LogicExp("((P|Q");
+        LogicExp brackets1 = new LogicExp("(~P&D)|(D&D))");
+
+        assertFalse(brackets.isValid());
+        assertFalse(brackets1.isValid());
 
     }
+
+    @Test
+    void isValidTestTooManyOfEach() {
+        assertFalse(new LogicExp("PPQ|").isValid());
+        assertFalse(new LogicExp("~~P|~~~|||||Q").isValid());
+    }
+
+    @Test
+    void isValidTestIllegalSymbols() {
+        assertFalse(new LogicExp("P$Q").isValid());
+        assertFalse(new LogicExp("{P|Q}").isValid());
+    }
+
+    @Test
+    void isValidTestViolateAssoc() {
+        assertFalse(new LogicExp("(P=Q=R)").isValid());
+        assertFalse(new LogicExp("P&R=A").isValid());
+    }
+
 }
