@@ -178,7 +178,10 @@ public class LogicExp {
         if (operators.isEmpty()) {
             return true;
         } else if (!operators.contains('(')) {
-            operators.removeAll(List.of('~'));
+            ArrayList<Character> chars = new ArrayList<>();
+            chars.add('~');
+            operators.removeAll(chars);
+
             return checkAllEqual(operators);
         } else {
             return false;
