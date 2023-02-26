@@ -1,6 +1,8 @@
 package model;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LogicExp {
 
@@ -86,6 +88,14 @@ public class LogicExp {
     // EFFECTS: returns true is expression is valid (can be evaluated)
     public boolean isValid() {
         if (hasNoIllegalCharacters()) {
+
+            Pattern bcktPattern = Pattern.compile("[(][|&=>]|[|&=>][)]");
+            Matcher testExp = bcktPattern.matcher(expression);
+
+            if (testExp.find()) {
+                return false;
+            }
+
             if (checkPosOfOperands()) {
                 return testCorrectOperatorsWithinBrackets();
             }
@@ -103,13 +113,13 @@ public class LogicExp {
     // MODIFIES: this
     // EFFECTS: removes extra spaces within in the input string, and returns the new string
     private String removeSpaces(String input) {
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
 
         int i = 0;
         while (i < input.length()) {
             char currChar = input.charAt(i);
             if (currChar != ' ') {
-                temp += currChar;
+                temp.append(currChar);
 
                 if (Character.isLetter(input.charAt(i)) && !symbols.contains(Character.toString(input.charAt(i)))) {
                     symbols.add(Character.toString(currChar));
@@ -119,7 +129,7 @@ public class LogicExp {
             i++;
         }
 
-        return temp;
+        return temp.toString();
     }
 
     public boolean checkPosOfOperands() {
@@ -140,32 +150,34 @@ public class LogicExp {
             }
         }
 
-        if (rank != 1) {
-            return false;
-        }
-
-        return true;
+        return rank == 1;
     }
 
 
     public boolean testCorrectOperatorsWithinBrackets() {
         Stack<Character> operators = new Stack<>();
-        String temp = "(" + expression + ")";
+        String temp = expression;
         for (int i = 0; i < temp.length(); i++) {
             if (temp.charAt(i) == ')') {
-                if (!removeUntilBracket(operators, i, temp)) {
+                if (!removeUntilBcktSuccessful(operators)) {
                     return false;
                 }
-            } else if (!Character.isLetter(temp.charAt(i))) {
+            } else if (temp.charAt(i) != '~' && (!Character.isLetter(temp.charAt(i)))) {
                 operators.push(temp.charAt(i));
             }
         }
 
-        return operators.empty();
+        if (operators.isEmpty()) {
+            return true;
+        } else if (!operators.contains('(')) {
+            return checkAllEqual(operators);
+        } else {
+            return false;
+        }
     }
 
 
-    private boolean removeUntilBracket(Stack<Character> ops, int i, String exp) {
+    private boolean removeUntilBcktSuccessful(Stack<Character> ops) {
         List<Character> opList = new ArrayList<>();
         boolean isFound = false;
         boolean isAllEqual = true;
@@ -173,12 +185,12 @@ public class LogicExp {
             char curr = ops.pop();
             if (curr == '(') {
                 isFound = true;
-                if (!checkAllEqual(opList, ops)) {
+                if (!checkAllEqual(opList)) {
                     isAllEqual = false;
                 }
 
                 break;
-            } else if (exp.charAt(i) != '~') {
+            } else if (curr != '~') {
                 opList.add(curr);
             }
         }
@@ -186,8 +198,12 @@ public class LogicExp {
         return isAllEqual && isFound;
     }
 
-    private boolean checkAllEqual(List<Character> op, Stack<Character> o) {
+    private boolean checkAllEqual(List<Character> op) {
         if (op.isEmpty()) {
+            return false;
+        }
+
+        if (op.size() == 1) {
             return true;
         }
 
@@ -209,8 +225,7 @@ public class LogicExp {
 
 
     public boolean hasNoIllegalCharacters() {
-        // TODO: fix this: didn't implement XOR yet
-        String allowChars = "~|&=>()";
+        String allowChars = "~|&=>()*";
         for (char c : expression.toCharArray()) {
             if (!Character.isLetter(c) && !allowChars.contains(Character.toString(c))) {
                 return false;

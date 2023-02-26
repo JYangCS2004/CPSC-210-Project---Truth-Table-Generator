@@ -38,6 +38,7 @@ public class OperatorTest {
     void evaluateTestConditional() {
         Operator operatorCond = new Operator('>');
         assertEquals(1, operatorCond.evaluate(0, 1));
+        assertEquals(0, operatorCond.evaluate(1, 0));
         assertEquals(0, operatorCond.getRank());
     }
 
@@ -45,6 +46,7 @@ public class OperatorTest {
     void evaluateTestBicond() {
         Operator operatorBi = new Operator('=');
         assertEquals(1, operatorBi.evaluate(1, 1));
+        assertEquals(0, operatorBi.evaluate(0, 1));
     }
 
     @Test
@@ -52,5 +54,20 @@ public class OperatorTest {
         Operator operatorNeg = new Operator('~');
         assertEquals(1, operatorNeg.getRank());
         assertEquals(1, operatorNeg.evaluate(0, 0));
+
+        assertEquals(0, operatorNeg.evaluateNegator(1));
+    }
+
+    @Test
+    void evaluateTestExOr() {
+        Operator exOr = new Operator('*');
+        assertEquals(0, exOr.evaluate(0, 0));
+        assertEquals(1, exOr.evaluate(1, 0));
+    }
+
+    @Test
+    void isHigherRankTestEqualRank() {
+        Operator op = new Operator('|');
+        assertFalse(op.isHigherRank('&'));
     }
 }

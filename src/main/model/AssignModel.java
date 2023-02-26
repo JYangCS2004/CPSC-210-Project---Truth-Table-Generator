@@ -71,4 +71,22 @@ public class AssignModel {
         return symbols.contains(symbol);
     }
 
+
+    // EFFECTS: returns the symbols inside the model
+    public List<String> getSymbols() {
+        return symbols;
+    }
+
+    // EFFECTS: returns the value of each symbol in a list of integers
+    public List<Integer> getValues() {
+        return values;
+    }
+
+    // EFFECTS: reset assignment of truth values to 0's
+    public void resetModel() {
+        this.numericValue = 0;
+        for (int i = 0; i < values.size(); i++) {
+            values.set(i, 0);
+        }
+    }
 }

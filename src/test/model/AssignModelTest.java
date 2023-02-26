@@ -3,6 +3,9 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AssignModelTest {
@@ -57,6 +60,21 @@ public class AssignModelTest {
         }
 
         assertEquals("111", model.nextValues());
+    }
+
+    @Test
+    void resetModelTest() {
+        List<Integer> ints = new ArrayList<>();
+        ints.add(0);
+        ints.add(0);
+        ints.add(0);
+
+        model.resetModel();
+        assertEquals(ints, model.getValues());
+
+        model.nextValues();
+        model.resetModel();
+        assertEquals(ints, model.getValues());
     }
 
 }

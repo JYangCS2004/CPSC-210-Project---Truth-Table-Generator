@@ -40,7 +40,7 @@ class LogicExpTest {
 
     @Test
     void evaluateTestMultipleBrackets() {
-        LogicExp expBracket = new LogicExp("(P|Q)&~(P&Q)");
+        LogicExp expBracket = new LogicExp("~(P&Q)&(P|Q)");
         AssignModel model = new AssignModel();
         model.add("P");
         model.add("Q");
@@ -53,7 +53,9 @@ class LogicExpTest {
     @Test
     void isValidTestValidExps() {
         assertTrue(new LogicExp("P&Q").testCorrectOperatorsWithinBrackets());
-        assertTrue(new LogicExp("(P&Q)").isValid());
+        assertTrue(new LogicExp("(P&Q)").testCorrectOperatorsWithinBrackets());
+        assertTrue(new LogicExp("P&~P").isValid());
+
     }
 
     @Test
@@ -70,6 +72,7 @@ class LogicExpTest {
     void isValidTestTooManyOfEach() {
         assertFalse(new LogicExp("PPQ|").isValid());
         assertFalse(new LogicExp("~~P|~~~|||||Q").isValid());
+        assertFalse(new LogicExp("P=Q&Q&").isValid());
     }
 
     @Test

@@ -57,9 +57,17 @@ public class Argument {
 
     // REQUIRES: exp is a valid expression
     // MODIFIES: this
-    // EFFECTS: sets the expression for the conclusion
+    // EFFECTS: sets the expression for the conclusion,
+    //          adds new symbols to model
     public void setConclusion(LogicExp exp) {
+
         this.conclusion = exp;
+
+        for (String symbol : exp.getSymbolsUsed()) {
+            if (!model.isInSet(symbol)) {
+                model.add(symbol);
+            }
+        }
     }
 
     public LogicExp getConclusion() {
@@ -72,6 +80,7 @@ public class Argument {
         return model;
     }
 
+    // EFFECTS: returns the premises as a list
     public List<LogicExp> getExps() {
         return premises;
     }
@@ -86,11 +95,35 @@ public class Argument {
             }
         }
 
-        if (result) {
-            result = !conclusion.getSymbolsUsed().contains(symbol);
+        if (conclusion != null) {
+            if (result) {
+                result = !conclusion.getSymbolsUsed().contains(symbol);
+            }
         }
 
         return result;
     }
 
+    public AssignModel returnInvalidModel() {
+        model.resetModel();
+        for (int j = 0; j < Math.pow(2, model.numOfSymbols()); j++) {
+            int first = computeEach().get(0);
+            boolean allSame = true;
+            for (int i = 0; i < computeEach().size() - 1; i++) {
+                if (computeEach().get(i) != first) {
+                    allSame = false;
+                }
+            }
+
+            if (allSame) {
+                if (first == 1 && conclusion.evaluate(model) == 0) {
+                    return model;
+                }
+            }
+
+            model.nextValues();
+        }
+
+        return null;
+    }
 }

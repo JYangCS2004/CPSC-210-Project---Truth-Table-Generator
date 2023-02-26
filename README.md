@@ -30,6 +30,6 @@ have learned in class, and as an extension to what I already know.
 
 ## User Stories
   - As a user, I want to be able to add an arbitrary number of premises to the argument.
+  - As a user, I want to be shown the complete truth table that displays all of the expressions inputted.
   - As a user, I want to be told the specific set of truth values that proves that an argument is invalid.
   - As a user, I want to be able to delete a premise from the set of logical statements.
-  - As a user, I want to be told whether if two statements are logically equivalent.

@@ -31,6 +31,8 @@ public class Operator {
                 return Math.max(x, y);
             case '>':
                 return evaluateConditional(x, y);
+            case '*':
+                return evaluateExOr(x, y);
             default:
                 return evaluateBiconditional(x, y);
         }
@@ -69,5 +71,13 @@ public class Operator {
         }
 
         return 0;
+    }
+
+    private int evaluateExOr(int x, int y) {
+        if (x == y) {
+            return 0;
+        }
+
+        return 1;
     }
 }
