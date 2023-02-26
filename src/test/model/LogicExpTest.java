@@ -62,6 +62,7 @@ class LogicExpTest {
         assertTrue(new LogicExp("P&~P").isValid());
 
         assertTrue(new LogicExp("(P&~P)").testCorrectOperatorsWithinBrackets());
+        assertTrue(new LogicExp("~P=~P").testCorrectOperatorsWithinBrackets());
 
     }
 

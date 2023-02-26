@@ -67,7 +67,7 @@ public class LogicExp {
     // EFFECTS: pops all operators from the stack of greater rank than the given operator,
     //          and pushes the results to the operand stack
     private void popAllHigher(Stack<Character> operators, Stack<Integer> operands, char curr) {
-        while (!operators.empty()) {
+        while (true) {
             Operator prev = new Operator(operators.peek());
 
             if (prev.isHigherRank(curr)) {
@@ -170,7 +170,7 @@ public class LogicExp {
                 if (!removeUntilBcktSuccessful(operators)) {
                     return false;
                 }
-            } else if (temp.charAt(i) != '~' && (!Character.isLetter(temp.charAt(i)))) {
+            } else if (!Character.isLetter(temp.charAt(i))) {
                 operators.push(temp.charAt(i));
             }
         }
@@ -178,6 +178,7 @@ public class LogicExp {
         if (operators.isEmpty()) {
             return true;
         } else if (!operators.contains('(')) {
+            operators.removeAll(List.of('~'));
             return checkAllEqual(operators);
         } else {
             return false;
