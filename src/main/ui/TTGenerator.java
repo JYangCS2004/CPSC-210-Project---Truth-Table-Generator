@@ -24,21 +24,21 @@ public class TTGenerator {
         printEachExp();
         System.out.println("Here are your statements so far. If you wish"
                 + " to add another statement, enter 'add'. If you want to delete an "
-                + "existing statement, enter 'delete'.");
+                + "existing statement, enter 'delete'. \n If you're done adding statements, enter 'confirm'");
 
         while (true) {
             String confirmed = getNextDecision();
             printEachExp();
             if (argument.getExps().size() == 0) {
-                System.out.println("You now have zero statements.");
+                System.out.println("You now have zero statements. Please enter another premise by entering 'add'.");
             } else {
                 if (confirmed.equals("confirm")) {
                     break;
                 }
 
-                System.out.println("Here are your statements so far. If you wish"
-                        + " to add another statement, enter 'add'. If you want to delete an "
-                        + "existing statement, enter 'delete'.");
+                System.out.println("Here are your statements so far. Enter 'add' to add another statement. "
+                        + "If you want to delete an "
+                        + "existing statement, enter 'delete'. \n If you're done adding statements, enter 'confirm'.");
             }
         }
 
@@ -176,8 +176,7 @@ public class TTGenerator {
 
     // EFFECTS: prints out the truth table based on the given premises and conclusion
     public void printTruthTable() {
-        List<String> headerRow = new ArrayList<>();
-        headerRow.addAll(argument.getModel().getSymbols());
+        List<String> headerRow = new ArrayList<>(argument.getModel().getSymbols());
 
         for (LogicExp e : argument.getExps()) {
             headerRow.add(e.getExpString());

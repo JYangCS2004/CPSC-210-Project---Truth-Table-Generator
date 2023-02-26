@@ -21,6 +21,11 @@ public class AssignModelTest {
 
     @Test
     void testConstructor() {
+        List<String> symbols = new ArrayList<>();
+        symbols.add("P");
+        symbols.add("Q");
+        symbols.add("R");
+        assertEquals(symbols, model.getSymbols());
     }
 
     @Test

@@ -47,6 +47,13 @@ public class ArgumentTest {
     }
 
     @Test
+    void setConclusionAddNewSymbols() {
+        arg2.setConclusion(new LogicExp("A"));
+        assertEquals(5, arg2.getModel().numOfSymbols());
+        assertTrue(arg2.getModel().isInSet("A"));
+    }
+
+    @Test
     void deleteExpsTestDeleteOneFromModel() {
         arg2.deleteExp(2);
         assertEquals(1, arg2.getExps().size());

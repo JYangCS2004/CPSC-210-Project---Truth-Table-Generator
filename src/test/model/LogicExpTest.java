@@ -48,12 +48,14 @@ class LogicExpTest {
         model.nextValues();
         model.nextValues();
         assertEquals(1, expBracket.evaluate(model));
+        assertEquals(1, new LogicExp("(P|~(P&Q))").evaluate(model));
     }
 
     @Test
     void isValidTestValidExps() {
         assertTrue(new LogicExp("P&Q").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("(P&Q)").testCorrectOperatorsWithinBrackets());
+        assertFalse(new LogicExp("()P()&Q").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("(P|Q|P)").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("P&~P").isValid());
 
@@ -66,12 +68,11 @@ class LogicExpTest {
 
         assertFalse(brackets.isValid());
         assertFalse(brackets1.isValid());
-
     }
 
     @Test
     void isValidTestTooManyOfEach() {
-        assertFalse(new LogicExp("PPQ|").isValid());
+        assertFalse(new LogicExp("(=PPQ|").isValid());
         assertFalse(new LogicExp("~~P|~~~|||||Q").isValid());
         assertFalse(new LogicExp("P=Q&Q&").isValid());
     }
