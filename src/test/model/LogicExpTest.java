@@ -54,6 +54,7 @@ class LogicExpTest {
     void isValidTestValidExps() {
         assertTrue(new LogicExp("P&Q").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("(P&Q)").testCorrectOperatorsWithinBrackets());
+        assertTrue(new LogicExp("(P|Q|P)").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("P&~P").isValid());
 
     }

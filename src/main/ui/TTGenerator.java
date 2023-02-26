@@ -20,19 +20,32 @@ public class TTGenerator {
 
     // EFFECTS: runs the Truth Table Generator
     public void runTTGenerator() {
-
         getInputExp();
+        printEachExp();
         System.out.println("Here are your statements so far. If you wish"
                 + " to add another statement, enter 'add'. If you want to delete an "
                 + "existing statement, enter 'delete'.");
 
-        getPremises();
+        while (true) {
+            String confirmed = getNextDecision();
+            printEachExp();
+            if (argument.getExps().size() == 0) {
+                System.out.println("You now have zero statements.");
+            } else {
+                if (confirmed.equals("confirm")) {
+                    break;
+                }
+
+                System.out.println("Here are your statements so far. If you wish"
+                        + " to add another statement, enter 'add'. If you want to delete an "
+                        + "existing statement, enter 'delete'.");
+            }
+        }
 
         System.out.print("Please input the concluding expression:");
         inputConclusion();
         printTruthTable();
         displayValidity();
-
     }
 
     // EFFECTS: get user's inputted expression. If the input is invalid, ask for input
@@ -54,37 +67,32 @@ public class TTGenerator {
         }
     }
 
-    // EFFECTS: prints out a short set of introductions for how to use the solver
-    public void displayBriefDocumentation() {
 
-    }
-
-    public void getPremises() {
+    // EFFECTS: prompts user to make a decision, and returns the decision made as a String
+    public String getNextDecision() {
         String makeChoice = "";
         while (true) {
-            try {
+            if (input.hasNextLine()) {
                 makeChoice = input.nextLine().toLowerCase();
                 if (makeChoice.equals("confirm")) {
                     break;
                 } else if (makeChoice.equals("add")) {
                     getInputExp();
+                    break;
                 } else if (makeChoice.equals("delete")) {
                     if (argument.getExps().isEmpty()) {
                         System.out.println("Can't delete more statements.");
                     } else {
                         askToDelete();
+                        break;
                     }
                 } else {
-                    System.out.println("Invalid input. Please try again...");
+                    System.out.println("");
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please choose one of these options:"
-                        + "'add', 'delete', 'confirm.'");
             }
-
-            printEachExp();
         }
 
+        return makeChoice;
     }
 
     // EFFECTS: display each expression in the premises on a separate line
@@ -110,13 +118,12 @@ public class TTGenerator {
 
                 if (deleteNum <= argument.getExps().size()) {
                     argument.deleteExp(deleteNum);
-                    System.out.println("Premises so far:");
                     isValidInput = true;
                 } else {
-                    System.out.println("Invalid input. Please try again...");
+                    System.out.println("");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please try again...");
+                System.out.println("");
             }
 
             if (isValidInput) {
@@ -191,17 +198,12 @@ public class TTGenerator {
         System.out.println(resultBuild);
 
 
-
         for (int i = 0; i < Math.pow(2, argument.getModel().numOfSymbols()); i++) {
             List<Integer> numRow = new ArrayList<>();
             numRow.addAll(argument.getModel().getValues());
             numRow.addAll(argument.computeEach());
 
-            StringBuilder rowString = new StringBuilder();
-            rowString.append(String.format(format, numRow.toArray())).append("\n");
-            System.out.println(rowString);
-
-
+            System.out.println(String.format(format, numRow.toArray()) + "\n");
             argument.getModel().nextValues();
         }
     }
