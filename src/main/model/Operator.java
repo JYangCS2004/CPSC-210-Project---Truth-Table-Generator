@@ -16,6 +16,7 @@ public class Operator {
         }
     }
 
+    // REQUIRES: x is either 1 or 0, y is either 1 or 0
     // EFFECTS: evaluates the expression x (operator) y
     public int evaluate(int x, int y) {
         switch (operator) {
@@ -38,6 +39,8 @@ public class Operator {
         }
     }
 
+
+    // EFFECTS: evaluates the negation operator
     public int evaluateNegator(int x) {
         return evaluate(0, x);
     }
@@ -49,14 +52,18 @@ public class Operator {
         return getRank() > testOp.getRank();
     }
 
+
+    // EFFECTS: returns the rank of the operator
     public int getRank() {
         return rank;
     }
 
+    // EFFECTS: returns the operator character
     public char getOperator() {
         return operator;
     }
 
+    // EFFECTS: evaluates the conditional
     private int evaluateConditional(int x, int y) {
         if (x == 1 && y == 0) {
             return 0;
@@ -65,6 +72,7 @@ public class Operator {
         return 1;
     }
 
+    // EFFECTS: evaluates the biconditional
     private int evaluateBiconditional(int x, int y) {
         if (x == y) {
             return 1;
@@ -73,6 +81,7 @@ public class Operator {
         return 0;
     }
 
+    // EFFECTS: evaluates XOR
     private int evaluateExOr(int x, int y) {
         if (x == y) {
             return 0;

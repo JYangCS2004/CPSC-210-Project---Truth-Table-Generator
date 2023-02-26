@@ -36,6 +36,7 @@ class LogicExpTest {
 
         newModel.nextValues();
         assertEquals(1, exp.evaluate(newModel));
+        assertEquals(1, new LogicExp("P|Q)").evaluate(newModel));
     }
 
     @Test
@@ -57,7 +58,10 @@ class LogicExpTest {
         assertTrue(new LogicExp("(P&Q)").testCorrectOperatorsWithinBrackets());
         assertFalse(new LogicExp("()P()&Q").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("(P|Q|P)").testCorrectOperatorsWithinBrackets());
+        assertTrue(new LogicExp("(P&Q&P)").testCorrectOperatorsWithinBrackets());
         assertTrue(new LogicExp("P&~P").isValid());
+
+        assertTrue(new LogicExp("(P&~P)").testCorrectOperatorsWithinBrackets());
 
     }
 
@@ -85,7 +89,7 @@ class LogicExpTest {
 
     @Test
     void isValidTestViolateAssoc() {
-        assertFalse(new LogicExp("(P=Q=R)").isValid());
+        assertFalse(new LogicExp("(P=Q=R)").testCorrectOperatorsWithinBrackets());
         assertFalse(new LogicExp("P&R=A").isValid());
     }
 

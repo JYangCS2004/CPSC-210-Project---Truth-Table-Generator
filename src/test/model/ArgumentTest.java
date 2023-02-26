@@ -99,4 +99,14 @@ public class ArgumentTest {
 
         assertNull(argument1.returnInvalidModel());
     }
+
+    @Test
+    void deleteExpsTestNoConclusion() {
+        Argument arg3 = new Argument();
+        arg3.addExp(new LogicExp("P*Q"));
+        arg3.addExp(new LogicExp("R"));
+
+        arg3.deleteExp(2);
+        assertEquals(2, arg3.getModel().numOfSymbols());
+    }
 }

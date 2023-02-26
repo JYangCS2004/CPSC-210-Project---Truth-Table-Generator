@@ -62,6 +62,10 @@ public class LogicExp {
         }
     }
 
+
+    // MODIFIES: operators, operands
+    // EFFECTS: pops all operators from the stack of greater rank than the given operator,
+    //          and pushes the results to the operand stack
     private void popAllHigher(Stack<Character> operators, Stack<Integer> operands, char curr) {
         while (!operators.empty()) {
             Operator prev = new Operator(operators.peek());
@@ -84,10 +88,10 @@ public class LogicExp {
         return symbols;
     }
 
-    // TODO: finish implementing isValid()
+
     // EFFECTS: returns true is expression is valid (can be evaluated)
     public boolean isValid() {
-        if (hasNoIllegalCharacters()) {
+        if (hasNoIllegalChars()) {
 
             Pattern bcktPattern = Pattern.compile("[(][|&=>]|[|&=>][)]");
             Matcher testExp = bcktPattern.matcher(expression);
@@ -132,6 +136,9 @@ public class LogicExp {
         return temp.toString();
     }
 
+
+    // EFFECTS: returns true if the operands and operators are in the right positions
+    //          with respect to each other
     public boolean checkPosOfOperands() {
         String temp = "(" + expression.replaceAll("~", "Q~") + ")";
 
@@ -154,6 +161,7 @@ public class LogicExp {
     }
 
 
+    // EFFECTS: returns true if the brackets are the in the right position
     public boolean testCorrectOperatorsWithinBrackets() {
         Stack<Character> operators = new Stack<>();
         String temp = expression;
@@ -177,6 +185,8 @@ public class LogicExp {
     }
 
 
+    // MODIFIES: ops
+    // EFFECTS: returns true if operators inside brackets are correct
     private boolean removeUntilBcktSuccessful(Stack<Character> ops) {
         List<Character> opList = new ArrayList<>();
         boolean isFound = false;
@@ -198,6 +208,9 @@ public class LogicExp {
         return isAllEqual && isFound;
     }
 
+
+    // EFFECTS: returns true if the sequence of operators is appropriate
+    //          in particular, it doesn't violate associativity.
     private boolean checkAllEqual(List<Character> op) {
         if (op.isEmpty()) {
             return false;
@@ -224,13 +237,15 @@ public class LogicExp {
     }
 
 
-    public boolean hasNoIllegalCharacters() {
+    // EFFECTS: returns true if the logic expression contains no illegal characters
+    public boolean hasNoIllegalChars() {
         String allowChars = "~|&=>()*";
         for (char c : expression.toCharArray()) {
             if (!Character.isLetter(c) && !allowChars.contains(Character.toString(c))) {
                 return false;
             }
         }
+
         return true;
     }
 }

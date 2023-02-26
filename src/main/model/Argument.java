@@ -70,6 +70,8 @@ public class Argument {
         }
     }
 
+
+    // EFFECTS: returns the conclusion of the argument
     public LogicExp getConclusion() {
         return conclusion;
     }
@@ -104,6 +106,8 @@ public class Argument {
         return result;
     }
 
+
+    // EFFECTS: returns the set of truth values that make the argument invalid
     public AssignModel returnInvalidModel() {
         model.resetModel();
         for (int j = 0; j < Math.pow(2, model.numOfSymbols()); j++) {
