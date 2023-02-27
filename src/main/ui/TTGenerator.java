@@ -9,13 +9,11 @@ public class TTGenerator {
     private Argument argument;
     private Scanner input;
 
-    boolean isValid;
 
     public TTGenerator() {
         argument = new Argument();
         input = new Scanner(System.in);
         runTTGenerator();
-        isValid = true;
     }
 
     // EFFECTS: runs the Truth Table Generator
@@ -51,19 +49,18 @@ public class TTGenerator {
     // EFFECTS: get user's inputted expression. If the input is invalid, ask for input
     //         again until an appropriate input is received.
     public void getInputExp() {
-        System.out.print("Please a enter premise on the next line:");
+        System.out.print("Please enter a premise on the next line:");
         while (true) {
             if (input.hasNextLine()) {
                 LogicExp userExp = new LogicExp(input.nextLine());
 
                 if (userExp.isValid()) {
                     argument.addExp(userExp);
-                    System.out.println("Premises so far:");
                     break;
                 }
             }
 
-            System.out.println("Invalid input. Please try again");
+            System.out.println("Invalid input. Please try again...");
         }
     }
 
@@ -109,7 +106,7 @@ public class TTGenerator {
     public void askToDelete() {
         System.out.println("I see you have chosen to remove a statement. "
                 + "Select the one to be deleted by entering the corresponding number"
-                + " (e.g., to delete 'P=Q' input 1).");
+                + " (e.g., to delete " + argument.getExps().get(0).getExpString() + ", input 1).");
 
         boolean isValidInput = false;
         while (!isValidInput) {
@@ -120,7 +117,7 @@ public class TTGenerator {
                     argument.deleteExp(deleteNum);
                     isValidInput = true;
                 } else {
-                    System.out.println("");
+                    System.out.println("Invalid input. Please try again...");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("");
@@ -188,7 +185,7 @@ public class TTGenerator {
 
         StringBuilder resultBuild = new StringBuilder();
         for (int n = 0; n < headerRow.size(); n++) {
-            formatBuild.append("%-").append(longestExp() + 5).append("s");
+            formatBuild.append("%-").append(longestExp() + 4).append("s");
         }
 
         String format = formatBuild.toString();

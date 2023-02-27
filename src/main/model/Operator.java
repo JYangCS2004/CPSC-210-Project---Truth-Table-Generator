@@ -1,5 +1,7 @@
 package model;
 
+
+// An Operator object
 public class Operator {
 
     char operator;

@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// abstract representation of a Logical Argument
 public class Argument {
     private List<LogicExp> premises;
     private LogicExp conclusion;

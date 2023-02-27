@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// abstract representation of an assignment of truth values (a.k.a. model)
 public class AssignModel {
 
     private List<String> symbols;

@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+// abstract representation of a logical expression
 public class LogicExp {
 
     private String expression;
@@ -175,13 +177,13 @@ public class LogicExp {
             }
         }
 
+        ArrayList<Character> chars = new ArrayList<>();
+        chars.add('~');
+        operators.removeAll(chars);
+
         if (operators.isEmpty()) {
             return true;
         } else if (!operators.contains('(')) {
-            ArrayList<Character> chars = new ArrayList<>();
-            chars.add('~');
-            operators.removeAll(chars);
-
             return checkAllEqual(operators);
         } else {
             return false;
