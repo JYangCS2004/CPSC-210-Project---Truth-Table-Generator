@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,9 +9,11 @@ import java.util.regex.Pattern;
 
 // abstract representation of a logical expression
 public class LogicExp {
-
     private String expression;
     private List<String> symbols;
+    private static final Pattern ILLEGAL_PATTERN = Pattern.compile("[(][|&=>]|[|&=>][)]");
+    private static final String ALLOWED_OPS = "~|&=>()*";
+
 
     // EFFECTS: constructs a new logical expression based on the given string
     public LogicExp(String exp) {
@@ -94,9 +98,7 @@ public class LogicExp {
     // EFFECTS: returns true is expression is valid (can be evaluated)
     public boolean isValid() {
         if (hasNoIllegalChars()) {
-
-            Pattern bcktPattern = Pattern.compile("[(][|&=>]|[|&=>][)]");
-            Matcher testExp = bcktPattern.matcher(expression);
+            Matcher testExp = ILLEGAL_PATTERN.matcher(expression);
 
             if (testExp.find()) {
                 return false;
@@ -148,9 +150,7 @@ public class LogicExp {
         for (int i = 0; i < temp.length(); i++) {
             if (Character.isLetter(temp.charAt(i))) {
                 rank++;
-            } else if (temp.charAt(i) == '(' || temp.charAt(i) == ')') {
-                continue;
-            } else {
+            } else if (temp.charAt(i) != '(' && temp.charAt(i) != ')') {
                 rank--;
             }
 
@@ -245,13 +245,21 @@ public class LogicExp {
 
     // EFFECTS: returns true if the logic expression contains no illegal characters
     public boolean hasNoIllegalChars() {
-        String allowChars = "~|&=>()*";
         for (char c : expression.toCharArray()) {
-            if (!Character.isLetter(c) && !allowChars.contains(Character.toString(c))) {
+            if (!Character.isLetter(c) && !ALLOWED_OPS.contains(Character.toString(c))) {
                 return false;
             }
         }
 
         return true;
+    }
+
+
+    // EFFECTS: returns a JSON representation of this logic expression
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("expression", expression);
+
+        return json;
     }
 }

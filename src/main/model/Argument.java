@@ -1,5 +1,8 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,8 +113,10 @@ public class Argument {
 
     // EFFECTS: returns the set of truth values that make the argument invalid
     public AssignModel returnInvalidModel() {
-        model.resetModel();
-        for (int j = 0; j < Math.pow(2, model.numOfSymbols()); j++) {
+        model.reset();
+        int numOfRows = (int) Math.pow(2, model.numOfSymbols());
+
+        for (int j = 0; j < numOfRows; j++) {
             int first = computeEach().get(0);
             boolean allSame = true;
             for (int i = 0; i < computeEach().size() - 1; i++) {
@@ -130,5 +135,31 @@ public class Argument {
         }
 
         return null;
+    }
+
+
+    // EFFECTS: returns a JSONObject representing an argument
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("premises", convertExpsToJson());
+
+        if (conclusion != null) {
+            json.put("conclusion", conclusion.toJson());
+        } else {
+            json.put("conclusion", new JSONObject());
+        }
+
+        return json;
+    }
+
+
+    // EFFECTS: returns a JSONArray representing the list of premises
+    private JSONArray convertExpsToJson() {
+        JSONArray jsonArr = new JSONArray();
+        for (LogicExp e : premises) {
+            jsonArr.put(e.toJson());
+        }
+
+        return jsonArr;
     }
 }

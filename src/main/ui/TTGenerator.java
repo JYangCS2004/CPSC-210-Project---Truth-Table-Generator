@@ -1,54 +1,118 @@
 package ui;
 
 import model.*;
+import persistence.ArgReader;
+import persistence.ArgWriter;
 
+import java.io.IOException;
 import java.util.*;
 
 public class TTGenerator {
 
     private Argument argument;
     private Scanner input;
+    private ArgReader reader;
+    private ArgWriter writer;
+    private static final String FILE = "./data/savedArgs.json";
 
 
+    // EFFECTS: Instantiates a new Truth Table Generator class
     public TTGenerator() {
         argument = new Argument();
         input = new Scanner(System.in);
+        reader = new ArgReader(FILE);
+        writer = new ArgWriter(FILE);
+
         runTTGenerator();
     }
 
     // EFFECTS: runs the Truth Table Generator
     public void runTTGenerator() {
-        getInputExp();
-        printEachExp();
-        System.out.println("Here are your statements so far. If you wish"
-                + " to add another statement, enter 'add'. If you want to delete an "
-                + "existing statement, enter 'delete'. \n If you're done adding statements, enter 'confirm'");
-
+        System.out.println("You currently have zero statements in your argument. Select of the options below:");
+        displayMenu();
+        loadPrevArgument();
         while (true) {
-            String confirmed = getNextDecision();
             printEachExp();
-            if (argument.getExps().size() == 0) {
-                System.out.println("You now have zero statements. Please enter another premise by entering 'add'.");
-            } else {
-                if (confirmed.equals("confirm")) {
+            displayAppropriateMenu();
+            String confirmed = getNextDecision();
+
+            if (confirmed.equals("c")) {
+                inputConclusion();
+            } else if (confirmed.equals("g")) {
+                printProperties();
+                if (chooseToReturnToArgument()) {
                     break;
                 }
+            } else if (confirmed.equals("q")) {
+                break;
+            } else if (confirmed.equals("s")) {
+                saveFile();
+                break;
+            }
+        }
+    }
 
-                System.out.println("Here are your statements so far. Enter 'add' to add another statement. "
-                        + "If you want to delete an "
-                        + "existing statement, enter 'delete'. \n If you're done adding statements, enter 'confirm'.");
+
+    // EFFECTS: displays the appropriate actions the user can take for next decision
+    private void displayAppropriateMenu() {
+        if (argument.getExps().size() == 0) {
+            System.out.println("You have zero premises. Please enter a premise by entering 'a'.");
+        } else {
+            System.out.println("Here are your statements so far. Please select one of the options below:");
+            displayMenu();
+        }
+    }
+
+
+    // EFFECTS: display Menu (all possible user inputs)
+    private void displayMenu() {
+        System.out.println("\ta -> add a premise");
+        System.out.println("\td -> delete a premise");
+        System.out.println("\ts -> save the current argument to file");
+        System.out.println("\tc -> change conclusion");
+        canGenerateTable();
+        System.out.println("\tq -> quit application");
+    }
+
+
+    // EFFECTS: prompts user to save the current argument
+    private boolean chooseToReturnToArgument() {
+        System.out.println("\n Truth Table successfully generated.");
+
+        while (true) {
+            System.out.println("\t Press '<' to return to argument.");
+            System.out.println("\t Press 's' to save");
+            System.out.println("\t Press 'q' to quit application");
+
+            String choice = input.nextLine();
+            if (choice.equals("q")) {
+                return true;
+            } else if (choice.equals("<")) {
+                break;
+            } else {
+                saveFile();
             }
         }
 
-        System.out.print("Please input the concluding expression:");
-        inputConclusion();
-        printTruthTable();
-        displayValidity();
+        return false;
     }
 
+
+    private void saveFile() {
+        try {
+            writer.open();
+            writer.writeToFile(argument);
+            writer.close();
+            System.out.println("Argument saved.");
+        } catch (IOException e) {
+            System.out.println("Reeters. Can't save file. ");
+        }
+    }
+
+    // MODIFIES: this
     // EFFECTS: get user's inputted expression. If the input is invalid, ask for input
     //         again until an appropriate input is received.
-    public void getInputExp() {
+    private void getInputExp() {
         System.out.print("Please enter a premise on the next line:");
         while (true) {
             if (input.hasNextLine()) {
@@ -65,26 +129,27 @@ public class TTGenerator {
     }
 
 
+
     // EFFECTS: prompts user to make a decision, and returns the decision made as a String
-    public String getNextDecision() {
-        String makeChoice = "";
+    private String getNextDecision() {
+        String makeChoice;
+        label:
         while (true) {
             if (input.hasNextLine()) {
                 makeChoice = input.nextLine().toLowerCase();
-                if (makeChoice.equals("confirm")) {
-                    break;
-                } else if (makeChoice.equals("add")) {
-                    getInputExp();
-                    break;
-                } else if (makeChoice.equals("delete")) {
-                    if (argument.getExps().isEmpty()) {
-                        System.out.println("Can't delete more statements.");
-                    } else {
-                        askToDelete();
-                        break;
-                    }
-                } else {
-                    System.out.println("");
+                switch (makeChoice) {
+                    case "c":
+                    case "q":
+                    case "g":
+                    case "s":
+                        break label;
+                    case "a":
+                        getInputExp();
+                        break label;
+                    case "d":
+                        if (askToDelete()) {
+                            break label;
+                        }
                 }
             }
         }
@@ -92,56 +157,93 @@ public class TTGenerator {
         return makeChoice;
     }
 
+
+    // EFFECTS: print properties of the current argument onto console
+    private void printProperties() {
+        printTruthTable();
+        displayValidity();
+        argument.getModel().reset();
+    }
+
+
+
+    // EFFECTS: loads the argument from previous session
+    private void loadPrevArgument() {
+        System.out.println("Do you wish to load the argument last saved? (y/n)");
+        try {
+            String userChoice = input.nextLine().toLowerCase();
+            if (userChoice.equals("y")) {
+                argument = reader.loadArgument();
+            }
+        } catch (IOException e) {
+            System.out.println("Can't load previous argument.");
+        }
+    }
+
+
     // EFFECTS: display each expression in the premises on a separate line
-    public void printEachExp() {
+    private void printEachExp() {
         int num = 1;
         for (LogicExp exp : argument.getExps()) {
             System.out.println(num + "." + exp.getExpString());
             num++;
         }
+
+        if (argument.getConclusion() != null) {
+            System.out.println("-------------- \n"
+                    + argument.getConclusion().getExpString());
+        }
     }
 
 
     // EFFECTS: prompt user to select a premise to remove, by entering a number
-    public void askToDelete() {
+    private boolean askToDelete() {
+        if (argument.getExps().isEmpty()) {
+            System.out.println("Can't delete more statements.");
+            return false;
+        }
         System.out.println("I see you have chosen to remove a statement. "
                 + "Select the one to be deleted by entering the corresponding number"
                 + " (e.g., to delete " + argument.getExps().get(0).getExpString() + ", input 1).");
 
-        boolean isValidInput = false;
-        while (!isValidInput) {
+        while (true) {
             try {
                 int deleteNum = input.nextInt();
 
                 if (deleteNum <= argument.getExps().size()) {
                     argument.deleteExp(deleteNum);
-                    isValidInput = true;
+                    break;
                 } else {
                     System.out.println("Invalid input. Please try again...");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("");
+                System.out.println("Invalid input. Please try again...");
+                input.next();
             }
-
-            if (isValidInput) {
-                break;
-            }
-
         }
+
+        return true;
+    }
+
+    // EFFECTS: prompts user to return to argument, or to quit the application
+    private boolean returnToArgument() {
+        if (input.hasNextLine()) {
+            String choice = input.nextLine();
+            return choice.equals("<");
+        }
+
+        return false;
     }
 
     // EFFECTS: prompt user to input a conclusion statement
-    public void inputConclusion() {
+    private void inputConclusion() {
+        System.out.print("Please input a concluding expression:");
         while (true) {
             if (input.hasNextLine()) {
                 LogicExp userExp = new LogicExp(input.nextLine());
 
                 if (userExp.isValid()) {
                     argument.setConclusion(userExp);
-
-                    printEachExp();
-                    System.out.println("-------------- \n"
-                            + argument.getConclusion().getExpString());
                     break;
                 }
             }
@@ -150,29 +252,16 @@ public class TTGenerator {
         }
     }
 
-    // EFFECTS: prompts user to change conclusion
-    public void changeConclusion() {
-        System.out.println("Would you like to change the conclusion? Enter 'yes' or 'no'."
-                + "By entering 'no', our solver will then generate the full truth table for all the expressions.");
 
-        while (true) {
-            if (input.hasNextLine()) {
-                String changeCon = input.nextLine().toLowerCase();
-                if (changeCon.equals("yes")) {
-                    System.out.print("Please enter a statement for the conclusion:");
-                    inputConclusion();
-                } else if (changeCon.equals("no")) {
-                    break;
-                }
-            }
+    // EFFECTS: prints to console saying whether it is possible to generate the table
+    private void canGenerateTable() {
+        if (argument.getExps().size() != 0 && argument.getConclusion() != null) {
+            System.out.println("\tg -> generate table");
         }
-
     }
 
-
-
     // EFFECTS: prints out the truth table based on the given premises and conclusion
-    public void printTruthTable() {
+    private void printTruthTable() {
         List<String> headerRow = new ArrayList<>(argument.getModel().getSymbols());
 
         for (LogicExp e : argument.getExps()) {
@@ -181,18 +270,9 @@ public class TTGenerator {
 
         headerRow.add(argument.getConclusion().getExpString());
 
-        StringBuilder formatBuild = new StringBuilder();
+        String format = getFormatting(headerRow);
 
-        StringBuilder resultBuild = new StringBuilder();
-        for (int n = 0; n < headerRow.size(); n++) {
-            formatBuild.append("%-").append(longestExp() + 4).append("s");
-        }
-
-        String format = formatBuild.toString();
-
-        resultBuild.append(String.format(format, headerRow.toArray())).append("\n");
-        System.out.println(resultBuild);
-
+        System.out.println(String.format(format, headerRow.toArray()) + "\n");
 
         for (int i = 0; i < Math.pow(2, argument.getModel().numOfSymbols()); i++) {
             List<Integer> numRow = new ArrayList<>();
@@ -205,16 +285,27 @@ public class TTGenerator {
     }
 
 
+    // EFFECTS: returns the formatting of the table
+    private String getFormatting(List<String> header) {
+        StringBuilder formatBuild = new StringBuilder();
+
+        for (int n = 0; n < header.size(); n++) {
+            formatBuild.append("%-").append(longestExp() + 4).append("s");
+        }
+
+        return formatBuild.toString();
+    }
+
+
     // EFFECTS: tells the user if the argument is valid
-    public void displayValidity() {
-        argument.getModel().resetModel();
-        System.out.println("\n \n Validity: ");
+    private void displayValidity() {
+        System.out.println("\n Validity: ");
         AssignModel possibleModel = argument.returnInvalidModel();
         if (possibleModel != null) {
             System.out.println("The argument is invalid.");
 
             for (String s : possibleModel.getSymbols()) {
-                System.out.print(s + ":" + possibleModel.getValForSymbol(s) + "     ");
+                System.out.print(s + ":" + possibleModel.getValForSymbol(s) + "    ");
             }
 
         } else {
@@ -228,9 +319,7 @@ public class TTGenerator {
         int longestLength = argument.getExps().get(0).getExpString().length();
 
         for (LogicExp e : argument.getExps()) {
-            if (e.getExpString().length() > longestLength) {
-                longestLength = e.getExpString().length();
-            }
+            longestLength = Math.max(longestLength, e.getExpString().length());
         }
 
         return longestLength;

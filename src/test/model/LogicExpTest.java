@@ -94,4 +94,9 @@ class LogicExpTest {
         assertFalse(new LogicExp("P&R=A").isValid());
     }
 
+    @Test
+    void toJsonTest() {
+        
+    }
+
 }

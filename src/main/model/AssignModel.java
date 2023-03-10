@@ -1,7 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 // abstract representation of an assignment of truth values (a.k.a. model)
@@ -46,21 +45,27 @@ public class AssignModel {
     // EFFECTS: generates the next set of truth values, re-assigns the
     // values of each symbol
     public String nextValues() {
-        if (numericValue + 1 <= Math.pow(2, numOfSymbols()) - 1) {
-            numericValue++;
-        }
-
+        incrementValue();
         String temp = Integer.toBinaryString(numericValue);
         String binCode = String.format("%" + numOfSymbols()
                 + "s", temp).replaceAll(" ", "0");
 
         int c = 0;
-        while (c < values.size()) {
+        while (c < binCode.length()) {
             values.set(c, Integer.parseInt(Character.toString(binCode.charAt(c))));
             c++;
         }
 
         return binCode;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: increments the numeric value for the assignment model
+    private void incrementValue() {
+        int maxNum = (int) Math.pow(2, numOfSymbols()) - 1;
+        if (numericValue + 1 <= maxNum) {
+            numericValue++;
+        }
     }
 
     // EFFECTS: returns the total number of symbols used in argument
@@ -85,7 +90,7 @@ public class AssignModel {
     }
 
     // EFFECTS: reset assignment of truth values to 0's
-    public void resetModel() {
+    public void reset() {
         this.numericValue = 0;
         for (int i = 0; i < values.size(); i++) {
             values.set(i, 0);

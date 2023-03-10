@@ -33,3 +33,5 @@ have learned in class, and as an extension to what I already know.
   - As a user, I want to be shown the complete truth table that displays all of the expressions inputted.
   - As a user, I want to be told the specific set of truth values that proves that an argument is invalid.
   - As a user, I want to be able to delete a premise from the set of logical statements.
+  - As a user, I want to have the option to save the current statements in the argument, and be reminded to do so when I quit the application.
+  - As a user, I want to have the option to load my previous set of statements, or merge them with the current ones.

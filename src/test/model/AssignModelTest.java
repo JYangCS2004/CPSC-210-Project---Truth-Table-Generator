@@ -74,11 +74,11 @@ public class AssignModelTest {
         ints.add(0);
         ints.add(0);
 
-        model.resetModel();
+        model.reset();
         assertEquals(ints, model.getValues());
 
         model.nextValues();
-        model.resetModel();
+        model.reset();
         assertEquals(ints, model.getValues());
     }
 
