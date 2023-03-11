@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 
-// TODO: write tests for ArgReader class aids
+// code adapted from CPSC210/JsonSerializationDemo
 public class ArgReader {
     private String source;
 
