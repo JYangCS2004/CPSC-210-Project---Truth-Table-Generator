@@ -177,7 +177,7 @@ public class LogicExp {
             }
         }
 
-        ArrayList<Character> chars = new ArrayList<>();
+        List<Character> chars = new ArrayList<>();
         chars.add('~');
         operators.removeAll(chars);
 

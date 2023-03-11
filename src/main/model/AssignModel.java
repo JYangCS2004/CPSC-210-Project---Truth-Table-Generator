@@ -92,8 +92,6 @@ public class AssignModel {
     // EFFECTS: reset assignment of truth values to 0's
     public void reset() {
         this.numericValue = 0;
-        for (int i = 0; i < values.size(); i++) {
-            values.set(i, 0);
-        }
+        values.replaceAll(e -> 0);
     }
 }

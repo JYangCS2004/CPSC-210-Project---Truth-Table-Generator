@@ -30,8 +30,8 @@ have learned in class, and as an extension to what I already know.
 
 ## User Stories
   - As a user, I want to be able to add an arbitrary number of premises to the argument.
-  - As a user, I want to be shown the complete truth table that displays all of the expressions inputted.
+  - As a user, I want to be shown the complete truth table that displays all the expressions inputted.
   - As a user, I want to be told the specific set of truth values that proves that an argument is invalid.
   - As a user, I want to be able to delete a premise from the set of logical statements.
-  - As a user, I want to have the option to save the current statements in the argument, and be reminded to do so when I quit the application.
-  - As a user, I want to have the option to load my previous set of statements, or merge them with the current ones.
+  - As a user, I want to have the option to save the current statements in the argument any time during the application.
+  - As a user, I want to have the option to load the set of statements that was last saved at any time during the program.

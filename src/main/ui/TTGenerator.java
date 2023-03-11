@@ -30,7 +30,6 @@ public class TTGenerator {
     public void runTTGenerator() {
         System.out.println("You currently have zero statements in your argument. Select of the options below:");
         displayMenu();
-        loadPrevArgument();
         while (true) {
             printEachExp();
             displayAppropriateMenu();
@@ -47,7 +46,8 @@ public class TTGenerator {
                 break;
             } else if (confirmed.equals("s")) {
                 saveFile();
-                break;
+            } else if (confirmed.equals("l")) {
+                loadPrevArgument();
             }
         }
     }
@@ -69,6 +69,7 @@ public class TTGenerator {
         System.out.println("\ta -> add a premise");
         System.out.println("\td -> delete a premise");
         System.out.println("\ts -> save the current argument to file");
+        System.out.println("\tl -> load last saved argument");
         System.out.println("\tc -> change conclusion");
         canGenerateTable();
         System.out.println("\tq -> quit application");
@@ -142,6 +143,7 @@ public class TTGenerator {
                     case "q":
                     case "g":
                     case "s":
+                    case "l":
                         break label;
                     case "a":
                         getInputExp();
@@ -169,12 +171,8 @@ public class TTGenerator {
 
     // EFFECTS: loads the argument from previous session
     private void loadPrevArgument() {
-        System.out.println("Do you wish to load the argument last saved? (y/n)");
         try {
-            String userChoice = input.nextLine().toLowerCase();
-            if (userChoice.equals("y")) {
-                argument = reader.loadArgument();
-            }
+            argument = reader.loadArgument();
         } catch (IOException e) {
             System.out.println("Can't load previous argument.");
         }
