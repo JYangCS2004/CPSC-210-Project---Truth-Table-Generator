@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.*;
 
 // code adapted from CPSC210/JsonSerializationDemo
+// JSON Writer for argument
 public class ArgWriter {
     private PrintWriter writer;
     private String destFile;

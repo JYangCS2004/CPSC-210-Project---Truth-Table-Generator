@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 
 // code adapted from CPSC210/JsonSerializationDemo
+// JSON Reader for argument
 public class ArgReader {
     private String source;
 
@@ -23,6 +24,8 @@ public class ArgReader {
         this.source = source;
     }
 
+    // EFFECTS: reads the JSON file and returns the argument the JSON object represents
+    //        throws IOException if unable to read from file
     public Argument loadArgument() throws IOException {
         Argument arg = new Argument();
         JSONObject json = readFile();
@@ -34,7 +37,7 @@ public class ArgReader {
         return arg;
     }
 
-    // REQUIRES: arg is not null
+
     // EFFECTS: adds premises to the given argument
     private void addPremises(Argument arg, JSONArray jsonArr) {
         for (Object o : jsonArr) {

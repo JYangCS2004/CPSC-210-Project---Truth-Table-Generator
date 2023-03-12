@@ -1,0 +1,2 @@
+{"premises": [{
+  "expression" : "P"},{"expression": "Q"} ], "conclusion": {"expression": "P=Q"}}
