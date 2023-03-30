@@ -35,3 +35,16 @@ have learned in class, and as an extension to what I already know.
   - As a user, I want to be able to delete a premise from the set of logical statements.
   - As a user, I want to have the option to save the current statements in the argument any time during the application.
   - As a user, I want to have the option to load the set of statements that was last saved at any time during the program.
+
+## Instructions for Grader
+- You can generate the first required action relating to adding Xs to a Y by inputting in the text field beside "Add Premise:" and then pressing 'Enter' on the keyboard to add it to the argument.
+The newly added premise will appear in the JList on the right.
+- You can remove a premise by selecting any premise in the JList, and then clicking the 'Delete' button.
+- You can locate the visual component by pressing the 'Save' button, or by pressing 'Enter' from the 'Add Premise' textbox on an invalid input.
+- You can save the state of my application by clicking 'Save' button.
+- You can reload the state of my application by clicking 'Load' button. 
+
+# Additional Notes:
+- To input a conclusion, input text into the textbox beside 'Add Conclusion', and press 'Enter'. A popup menu will appear showing an image icon.
+- Instructions for input: The only allowed characters are: * \(xor\), = (bi-condition), | (or),
+& (and), ~ (negation), ( (left bracket), ) (right bracket), > (conditional), and the 26 letters in the alphabet.

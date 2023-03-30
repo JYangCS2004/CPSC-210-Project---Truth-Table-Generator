@@ -1,1 +1,1 @@
-{"conclusion":{"expression":"~(q&p)"},"premises":[{"expression":"~(p|r)"},{"expression":"p&q"},{"expression":"p>~q"}]}
+{"conclusion":{},"premises":[]}
