@@ -14,6 +14,8 @@ public class ArgumentTable {
     private JTable table;
     private Argument argument;
 
+
+    // creates a new truth table window
     public ArgumentTable(Argument arg) {
         frame = new JFrame();
         argument = arg;
@@ -39,12 +41,15 @@ public class ArgumentTable {
         frame.setVisible(true);
     }
 
+
+    // EFFECTS: generates each row of the truth table
     private Integer[] generateEachRow(List<Integer> computed) {
         List<Integer> eachValue = new ArrayList<>(argument.getModel().getValues());
         eachValue.addAll(computed);
         return eachValue.toArray(new Integer[0]);
     }
 
+    // EFFECTS: returns the string for each logic expression
     private String[] getNames() {
         List<String> names = new ArrayList<>(argument.getModel().getSymbols());
 
@@ -66,6 +71,7 @@ public class ArgumentTable {
     }
 
 
+    // EFFECTS: displays an invalid model
     private void displayInvalidModel() {
         argument.getModel().reset();
         JPanel panel = new JPanel();

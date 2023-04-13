@@ -48,3 +48,13 @@ Additional Notes:
 - To input a conclusion, input text into the textbox beside 'Add Conclusion', and press 'Enter'. A popup menu will appear showing an image icon.
 - Instructions for input: The only allowed characters are: * \(xor\), = (bi-condition), | (or),
 & (and), ~ (negation), ( (left bracket), ) (right bracket), > (conditional), and the 26 letters in the alphabet.
+
+# Phase 4: Task 2
+![](C:\Users\jorda\OneDrive\Pictures\eventlog.PNG)
+
+# Phase 4: Task 3
+If I had more time to work on this project, I would definitely modify the functionality of the AssignModel class. Currently, the class that 
+represents the set of truth tables needs the client to manually update the set of truth tables. Additionally, the client also needs to reset the truth values.
+I could refactor it so that all the user needs to do is loop through the set of truth values, and not worry about the underlying structure of the class.
+To do this, I could implement the Iterator Pattern. The class would contain the list of all the truth values, and the client just need to loop through them without manually updating to the next set of values.
+

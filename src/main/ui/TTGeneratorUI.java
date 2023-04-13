@@ -2,14 +2,15 @@ package ui;
 
 
 import model.Argument;
+import model.EventLog;
 import model.LogicExp;
+import model.Event;
 import persistence.ArgReader;
 import persistence.ArgWriter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -49,6 +50,21 @@ public class TTGeneratorUI {
         argument = new Argument();
         frame.setResizable(false);
         frame.setVisible(true);
+
+        initializeWindowListener();
+    }
+
+
+    // EFFECTS: initializes window listener
+    public void initializeWindowListener() {
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                for (Event event : EventLog.getInstance()) {
+                    System.out.println(event);
+                }
+            }
+        });
     }
 
 
@@ -202,7 +218,6 @@ public class TTGeneratorUI {
             }
         }
     }
-
 
     // ActionListener for generating table
     private class GenerateTableActionListener implements ActionListener {

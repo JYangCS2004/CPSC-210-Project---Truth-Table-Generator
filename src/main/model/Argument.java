@@ -23,6 +23,7 @@ public class Argument {
     // EFFECTS: deletes an expression from the argument, re-adjusts
     //          the counter
     public void deleteExp(int num) {
+        EventLog.getInstance().logEvent(new Event("A premise was removed from the argument."));
         LogicExp exp = premises.get(num - 1);
         premises.remove(num - 1);
         for (String s : exp.getSymbolsUsed()) {
@@ -37,6 +38,7 @@ public class Argument {
     // EFFECTS: adds a new expression to the argument, re-adjusts
     //          the counter
     public void addExp(LogicExp exp) {
+        EventLog.getInstance().logEvent(new Event("A new premise was added."));
         premises.add(exp);
 
         for (String symbol : exp.getSymbolsUsed()) {
@@ -64,7 +66,7 @@ public class Argument {
     // EFFECTS: sets the expression for the conclusion,
     //          adds new symbols to model
     public void setConclusion(LogicExp exp) {
-
+        EventLog.getInstance().logEvent(new Event("Conclusion was changed to " + exp.getExpString() + "."));
         this.conclusion = exp;
 
         for (String symbol : exp.getSymbolsUsed()) {

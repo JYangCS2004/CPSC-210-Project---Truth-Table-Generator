@@ -1,1 +1,1 @@
-{"conclusion":{},"premises":[]}
+{"conclusion":{"expression":"q"},"premises":[{"expression":"~p"},{"expression":"r&q"},{"expression":"r=q"},{"expression":"r*q"}]}
