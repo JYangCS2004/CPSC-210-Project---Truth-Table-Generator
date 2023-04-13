@@ -50,11 +50,40 @@ Additional Notes:
 & (and), ~ (negation), ( (left bracket), ) (right bracket), > (conditional), and the 26 letters in the alphabet.
 
 # Phase 4: Task 2
-![](C:\Users\jorda\OneDrive\Pictures\eventlog.PNG)
+Sample of Logged Events:
+
+Wed Apr 12 22:02:26 PDT 2023
+
+A new premise was added.
+
+Wed Apr 12 22:02:31 PDT 2023
+
+A new premise was added.
+
+Wed Apr 12 22:02:41 PDT 2023
+
+Conclusion was changed to q.
+
+Wed Apr 12 22:02:47 PDT 2023
+
+Conclusion was changed to ~p.
+
+Wed Apr 12 22:02:55 PDT 2023
+
+A premise was removed from the argument.
+
+Wed Apr 12 22:03:01 PDT 2023
+
+A premise was removed from the argument.
 
 # Phase 4: Task 3
 If I had more time to work on this project, I would definitely modify the functionality of the AssignModel class. Currently, the class that 
 represents the set of truth tables needs the client to manually update the set of truth tables. Additionally, the client also needs to reset the truth values.
 I could refactor it so that all the user needs to do is loop through the set of truth values, and not worry about the underlying structure of the class.
 To do this, I could implement the Iterator Pattern. The class would contain the list of all the truth values, and the client just need to loop through them without manually updating to the next set of values.
+This could significantly improve my code in various ways. Right now, many places in the code involving looping through the truth values.
+So this will be improved by implementing the pattern. 
+
+Additionally, I want to GUI to show the type of the user-inputted statement (eg. tautology, contradiction, and contingency).
+To do this, each logic expression would need its own set of truth values. Hence, using the iterator pattern on the AssignModel class would make this more efficient.
 
